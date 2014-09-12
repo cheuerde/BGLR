@@ -47,12 +47,11 @@
 
 SEXP sample_beta_sparse(SEXP n, SEXP pL, SEXP XL, SEXP xL2, SEXP bL, SEXP e, SEXP varBj, SEXP varE, SEXP minAbsBeta)
 {
-//    double *xj;
-    double *pXL, *pxL2, *pbL, *pe, *pvarBj;
+
+    double *pxL2, *pbL, *pe, *pvarBj;
     double b;
-    int inc=1;
     double rhs,c,sigma2e, smallBeta;
-    int j,i, rows, cols;
+    int j,rows, cols;
 
     SEXP list;	
 
@@ -67,7 +66,6 @@ SEXP sample_beta_sparse(SEXP n, SEXP pL, SEXP XL, SEXP xL2, SEXP bL, SEXP e, SEX
    which is implemented in R (package Matrix) as the class "dgCMatrix" */	
     int *InnerIndices = INTEGER(GET_SLOT(XL, install("i"))),
         *OuterStarts = INTEGER(GET_SLOT(XL, install("p"))),
-        *dim = INTEGER(GET_SLOT(XL, install("Dim")));
     double *x = REAL(GET_SLOT(XL, install("x")));
 
     int row_index,this_column_length;
@@ -137,12 +135,12 @@ SEXP sample_beta_sparse(SEXP n, SEXP pL, SEXP XL, SEXP xL2, SEXP bL, SEXP e, SEX
 
 SEXP sample_beta3_sparse(SEXP n, SEXP p, SEXP X, SEXP x2, SEXP b, SEXP d, SEXP error, SEXP varBj, SEXP varE, SEXP minAbsBeta, SEXP probInside)
 {
-  int i,j,rows,cols;
+  int j,rows,cols;
   double sigma2e, probIn, logOdds,tmp,betaj;
   double logOddsPrior;
   double rhs,c;
   double RSS, Xe, RSS_in, RSS_out;
-  double *pX, *perror, *pb, *px2,*pvarBj;
+  double *perror, *pb, *px2,*pvarBj;
   int inc=1;
   double c1;
   int *pd;
@@ -152,7 +150,6 @@ SEXP sample_beta3_sparse(SEXP n, SEXP p, SEXP X, SEXP x2, SEXP b, SEXP d, SEXP e
 /* this is the inner representation of a "dgCMatrix"  */	
   int *InnerIndices = INTEGER(GET_SLOT(X, install("i"))),
       *OuterStarts = INTEGER(GET_SLOT(X, install("p"))),
-      *dim = INTEGER(GET_SLOT(X, install("Dim")));
   double *x = REAL(GET_SLOT(X, install("x")));
 
   int row_index,this_column_length;
