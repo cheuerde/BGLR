@@ -65,7 +65,7 @@ SEXP sample_beta_sparse(SEXP n, SEXP pL, SEXP XL, SEXP xL2, SEXP bL, SEXP e, SEX
 /* this is the inner representation of a compressed column major sparse-matrix  
    which is implemented in R (package Matrix) as the class "dgCMatrix" */	
     int *InnerIndices = INTEGER(GET_SLOT(XL, install("i"))),
-        *OuterStarts = INTEGER(GET_SLOT(XL, install("p"))),
+        *OuterStarts = INTEGER(GET_SLOT(XL, install("p")));
     double *x = REAL(GET_SLOT(XL, install("x")));
 
     int row_index,this_column_length;
@@ -149,7 +149,7 @@ SEXP sample_beta3_sparse(SEXP n, SEXP p, SEXP X, SEXP x2, SEXP b, SEXP d, SEXP e
 
 /* this is the inner representation of a "dgCMatrix"  */	
   int *InnerIndices = INTEGER(GET_SLOT(X, install("i"))),
-      *OuterStarts = INTEGER(GET_SLOT(X, install("p"))),
+      *OuterStarts = INTEGER(GET_SLOT(X, install("p")));
   double *x = REAL(GET_SLOT(X, install("x")));
 
   int row_index,this_column_length;
