@@ -1198,7 +1198,7 @@ BGLR=function (y, response_type = "gaussian", a = NULL, b = NULL,
                   e = ans[[2]]
 
                   DF = ETA[[j]]$df0 + ETA[[j]]$p
-                  SS = sum(ETA[[j]]$b^2) + ETA[[j]]$S0
+                  SS = sum(ETA[[j]]$b^2) + ETA[[j]]$S0 * ETA[[j]]$df0
                   ETA[[j]]$varB = SS/rchisq(df = DF, n = 1)
                 }# END BRR
                 
@@ -1222,7 +1222,7 @@ BGLR=function (y, response_type = "gaussian", a = NULL, b = NULL,
                    {
                         index=ETA[[j]]$windows_list[[nw]]
 			DF = ETA[[j]]$df0 + length(index)
-                  	SS = sum((ETA[[j]]$b[index])^2) + ETA[[j]]$S0
+                  	SS = sum((ETA[[j]]$b[index])^2) + ETA[[j]]$S0 * ETA[[j]]$df0
                         tmp=c(tmp,rep(SS/rchisq(df = DF, n = 1),length(index)))
                    }
                    ETA[[j]]$varB=tmp
@@ -1302,8 +1302,8 @@ BGLR=function (y, response_type = "gaussian", a = NULL, b = NULL,
                    
                   #update the variance
                   tmp = ETA[[j]]$uStar/sqrt(ETA[[j]]$d)
-                  SS = as.numeric(crossprod(tmp)) + ETA[[j]]$S0
-                  DF = ETA[[j]]$levelsU + ETA[[j]]$df0
+                  SS = as.numeric(crossprod(tmp)) + ETA[[j]]$S0 * ETA[[j]]$df0
+                  DF = ETA[[j]]$levelsU + ETA[[j]]$df0 
                   ETA[[j]]$varU = SS/rchisq(n = 1, df = DF)
                 }#END RKHS
 
@@ -1324,7 +1324,7 @@ BGLR=function (y, response_type = "gaussian", a = NULL, b = NULL,
                   e = ans[[2]]
                    
                   #Update variances
-                  SS = ETA[[j]]$S + ETA[[j]]$b^2
+                  SS = ETA[[j]]$S * ETA[[j]]$df0 + ETA[[j]]$b^2
                   DF = ETA[[j]]$df0 + 1
                   ETA[[j]]$varB = SS/rchisq(n = ETA[[j]]$p, df = DF)
 
@@ -1372,7 +1372,7 @@ BGLR=function (y, response_type = "gaussian", a = NULL, b = NULL,
 			#Update the variance component associated with the markers
 			if(ETA[[j]]$model=="BayesB")
 			{
-				SS = ETA[[j]]$b^2 + ETA[[j]]$S
+				SS = ETA[[j]]$b^2 * ETA[[j]]$df0 + ETA[[j]]$S
                       		DF = ETA[[j]]$df0+1
                       		ETA[[j]]$varB = SS/rchisq(df=DF, n = ETA[[j]]$p)
 
@@ -1382,7 +1382,7 @@ BGLR=function (y, response_type = "gaussian", a = NULL, b = NULL,
                                 ETA[[j]]$S=rgamma(shape=tmpShape,rate=tmpRate,n=1)
 
 			}else{
-				SS = sum(ETA[[j]]$b^2) + ETA[[j]]$S0
+				SS = sum(ETA[[j]]$b^2) + ETA[[j]]$S0 * ETA[[j]]$df0
 				DF = ETA[[j]]$df0 + ETA[[j]]$p
                   		ETA[[j]]$varB = SS/rchisq(df = DF, n = 1)
 			}
@@ -1399,7 +1399,7 @@ BGLR=function (y, response_type = "gaussian", a = NULL, b = NULL,
        #4#
          # residual variance # missing values
         if (response_type == "gaussian") {
-            SS = sum(e * e) + S0 + deltaSS
+            SS = sum(e * e) + S0 * df0 + deltaSS
             DF = n + df0 + deltadf
             varE = SS/rchisq(n = 1, df = DF)
             sdE = sqrt(varE)
