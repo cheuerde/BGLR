@@ -931,15 +931,18 @@ rinvGauss=function(n, nu, lambda)
 #y: response vector
 #predicted response vector, yHat=X%*%beta
 #threshold
+
+# FIXME this is too slow
 loglik_ordinal=function(y,yHat,threshold)
 {
-	sum=0
-        n=length(y)
-	for(i in 1:n)
-        {
-           sum=sum + log(pnorm(threshold[y[i] + 1]-yHat[i])-pnorm(threshold[y[i]]-yHat[i]))
-        }
-        return(sum)
+#	sum=0
+#        n=length(y)
+#	for(i in 1:n)
+#        {
+#           sum=sum + log(pnorm(threshold[y[i] + 1]-yHat[i])-pnorm(threshold[y[i]]-yHat[i]))
+#        }
+#        return(sum)
+return(1)
 }
 
 ##################################################################################################
