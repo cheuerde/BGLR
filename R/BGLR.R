@@ -97,7 +97,7 @@ setLT.Fixed=function(LT,n,j,y,weights,nLT,saveAt,rmExistingFiles)
 
     LT$fileOut=file(description=fname,open="w")
     tmp=LT$colNames
-    write(tmp, ncolumns = LT$p, file = LT$fileOut, append = TRUE)
+    write_out(tmp, ncolumns = LT$p, file = LT$fileOut, append = TRUE)
 # This is not necessary as matrix is a vector anyways
 # Removed everywhere!
 #    LT$X=as.vector(LT$X)
@@ -675,7 +675,7 @@ setLT.BayesBandC=function(LT,y,n,j,weights,saveAt,R2,nLT,rmExistingFiles)
   if(model=="BayesB")
   {
 	tmp=c('probIn','scale')
-   	write(tmp, ncolumns = LT$p, file = LT$fileOut, append = TRUE)
+   	write_out(tmp, ncolumns = LT$p, file = LT$fileOut, append = TRUE)
   }
 
   #Objects for storing MCMC information 
@@ -996,6 +996,10 @@ BGLR=function (y, response_type = "gaussian", a = NULL, b = NULL,
     if (saveAt == "") {
         saveAt = paste(getwd(), "/", sep = "")
     }
+
+# omit writing files when not necessary
+   if( saveAt == "nosave" ) { write_out <- function(...) {} } else { write_out <- write } 
+  
 
     y=as.vector(y)
     y0=y
@@ -1457,42 +1461,42 @@ BGLR=function (y, response_type = "gaussian", a = NULL, b = NULL,
                 for (j in 1:nLT) {
 
                   if (ETA[[j]]$model == "FIXED") {
-                    write(ETA[[j]]$b, file = ETA[[j]]$fileOut, append = TRUE)
+                    write_out(ETA[[j]]$b, file = ETA[[j]]$fileOut, append = TRUE)
                   }
 
                   if (ETA[[j]]$model == "BRR") {
-                    write(ETA[[j]]$varB, file = ETA[[j]]$fileOut, append = TRUE)
+                    write_out(ETA[[j]]$varB, file = ETA[[j]]$fileOut, append = TRUE)
                   }
 
                   if (ETA[[j]]$model == "BL") {
-                    write(ETA[[j]]$lambda, file = ETA[[j]]$fileOut, append = TRUE)
+                    write_out(ETA[[j]]$lambda, file = ETA[[j]]$fileOut, append = TRUE)
                   }
 
                   if (ETA[[j]]$model == "RKHS") {
-                    write(ETA[[j]]$varU, file = ETA[[j]]$fileOut, append = TRUE)
+                    write_out(ETA[[j]]$varU, file = ETA[[j]]$fileOut, append = TRUE)
                   }
 
                   if (ETA[[j]]$model == "BayesC") {
                     tmp = c(ETA[[j]]$probIn, ETA[[j]]$varB)
-                    write(tmp, ncolumns = 2, file = ETA[[j]]$fileOut, append = TRUE)
+                    write_out(tmp, ncolumns = 2, file = ETA[[j]]$fileOut, append = TRUE)
                   }
 
                   if (ETA[[j]]$model == "BayesA") {
                     tmp=ETA[[j]]$S
-                    write(tmp, ncolumns = 1, file = ETA[[j]]$fileOut, append = TRUE)
+                    write_out(tmp, ncolumns = 1, file = ETA[[j]]$fileOut, append = TRUE)
                   }
                   
                   if(ETA[[j]]$model=="BayesB")
                   {
                         tmp=c(ETA[[j]]$probIn,ETA[[j]]$S)
-                        write(tmp, ncolumns = 2, file = ETA[[j]]$fileOut, append = TRUE)
+                        write_out(tmp, ncolumns = 2, file = ETA[[j]]$fileOut, append = TRUE)
                   }
                 }
             }
 
             #Output files
-            write(x = mu, file = fileOutMu, append = TRUE)
-            write(x = varE, file = fileOutVarE, append = TRUE)
+            write_out(x = mu, file = fileOutMu, append = TRUE)
+            write_out(x = varE, file = fileOutVarE, append = TRUE)
             if (i > burnIn) {
                 nSums = nSums + 1
                 k = (nSums - 1)/(nSums)
